@@ -1,0 +1,22 @@
+dateModified: 1632664491
+email:
+  fromEmail: gavin.vaske@gmail.com
+  fromName: 'craft shipping module'
+  transportType: craft\mail\transportadapters\Sendmail
+meta:
+  __names__:
+    9a0dd50c-22d8-4fc2-a6c7-67e3773755a6: Common # Common
+    495cdc72-5b00-4fdf-b69d-570303926f82: 'craft shipping module' # craft shipping module
+    3917f903-4e4b-4532-920c-0ecaa88adadf: 'craft shipping module' # craft shipping module
+system:
+  edition: solo
+  live: true
+  name: 'craft shipping module'
+  schemaVersion: 3.7.8
+  timeZone: America/Los_Angeles
+users:
+  allowPublicRegistration: false
+  defaultGroup: null
+  photoSubpath: null
+  photoVolumeUid: null
+  requireEmailVerification: true

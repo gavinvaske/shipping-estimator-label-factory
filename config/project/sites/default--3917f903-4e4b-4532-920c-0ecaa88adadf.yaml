@@ -1,0 +1,8 @@
+baseUrl: $PRIMARY_SITE_URL
+handle: default
+hasUrls: true
+language: en-US
+name: 'craft shipping module'
+primary: true
+siteGroup: 495cdc72-5b00-4fdf-b69d-570303926f82 # craft shipping module
+sortOrder: 1
