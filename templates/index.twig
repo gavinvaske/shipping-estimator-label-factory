@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta charset="utf-8" />
     <title>Welcome Gavin Vaske</title>
@@ -55,9 +56,17 @@
         <div class="main">
             <h1>Welcome Gavin Vaske</h1>
             <p>The man who moves mountains...starts by moving stones.</p>
-            <button onclick="gavinDoStuff()">
+            <button id="gavin-btn">
                 Click Me!!
-            </button>   
+            </button>
+            <form method="post">
+                {{ csrfInput() }}
+                <input type="hidden" name="action" value="site-module/shipping/do-something">
+
+                <button type="submit" class="primary-btn bg-orange border-orange">
+                    Submit Form
+                </button>
+            </form>
         </div>
     </div>
 </div>
@@ -65,37 +74,38 @@
 </html>
 
 <script>
+    $(document).ready(function () {
+        $("#gavin-btn").click(function() {
+            sendAjaxRequest();
+        })
+
+        function sendAjaxRequest() {
+            let csrfToken = window.csrfTokenValue
+
+            alert('Before AJAX');
+
+            $.ajax({
+                type: 'post',
+                url: '',
+                headers: {
+                    "X-CSRF-Token" : csrfToken,
+                },
+                data:
+                    {
+                        'action' : 'sitemodule/shipping/do-something',
+                    },
+                dataType: 'text',
+                success: function(response) {
+                    alert('Success: ' + JSON.stringify(response));
+                },
+                error: function(error) {
+                    alert('Error: ' + JSON.stringify(error));
+                }
+            });
+        }
+    })
+
     function gavinDoStuff() {
         alert("You clicked a butt-on!");
-    }
-
-    function sendAjaxRequest() {
-        let csrfToken = window.csrfTokenValue
-
-        alert('Before AJAX');
-
-        $.ajax({
-            type: 'post',
-            url: '',
-            headers: {
-                "X-CSRF-Token" : csrfToken,
-            },
-            data:
-                {
-                    'action' : 'shipping-estimator/shipping/do-something',
-                },
-            dataType: 'json',
-            success: function(response) {
-                if (response.success) {
-                    triggerEvent('success: ', response);
-                }
-                else {
-                    alert('That was not suppose to happen');
-                }
-            },
-            error: function(error) {
-                alert('Error: ' + JSON.stringify(error));
-            }
-        });
     }
 </script>
