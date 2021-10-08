@@ -4,6 +4,7 @@ namespace modules\sitemodule\controllers;
 
 use Craft;
 use craft\web\Controller;
+use modules\sitemodule\services\ShippingService;
 
 /**
  * Shipping Controller
@@ -43,10 +44,9 @@ class ShippingController extends Controller
     public function actionDoSomething()
     {
         $result = 'Welcome to the ShippingController actionDoSomething() method';
+        $shippingService = new ShippingService();
 
-        print "Hello Marsss!!";
-
-        return $result;
+        return $shippingService->makeUPSApiShippingRequest();
     }
 
     /**
