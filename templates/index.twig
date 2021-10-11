@@ -59,7 +59,7 @@
             <button id="gavin-btn">
                 Click Me!!
             </button>
-            <form method="post">
+            <form method="post" class="add-to-cart-form">
                 {{ csrfInput() }}
                 <input type="hidden" name="action" value="site-module/shipping/do-something">
 
@@ -74,36 +74,66 @@
 </html>
 
 <script>
-    $(document).ready(function () {
-        $("#gavin-btn").click(function() {
-            sendAjaxRequest();
-        })
+    $('form.add-to-cart-form').on('submit', function(e) {
+        let log_message = 'add to cart clicked'
+        alert(log_message)
+        // console.log(log_message);
+        e.preventDefault();
+        var form_data = $(this).serializeArray();
+        let csrfToken = window.csrfTokenValue
+        form_data['CRAFT_CSRF_TOKEN'] = csrfToken	// Setting CSRF token in duplicate places redundently
 
-        function sendAjaxRequest() {
-            let csrfToken = window.csrfTokenValue
-
-            alert('Before AJAX');
-
-            $.ajax({
-                type: 'post',
-                url: '',
-                headers: {
-                    "X-CSRF-Token" : csrfToken,
-                },
-                data:
-                    {
-                        'action' : 'sitemodule/shipping/do-something',
-                    },
-                dataType: 'text',
-                success: function(response) {
-                    alert('Success: ' + JSON.stringify(response));
-                },
-                error: function(error) {
-                    alert('Error: ' + JSON.stringify(error));
-                }
-            });
-        }
-    })
+        form_data['action'] = 'site-module/shipping/do-something'
+        $.ajax({
+            type: 'post',
+            url: '',
+            headers: {
+                "X-CSRF-Token" : csrfToken,	// Setting CSRF token in duplicate places redundently
+            },
+            type: 'post',
+            url: '',
+            data: form_data,
+            dataType: 'json',
+            success: function(response) {
+                alert(`response => ${JSON.stringify(response)}`)
+            },
+            error: function(error) {
+                alert('Error: ' + JSON.stringify(error))
+            }
+        });
+    });
+    // $(document).ready(function () {
+    //     $("#gavin-btn").click(function() {
+    //         sendAjaxRequest();
+    //     })
+    //
+    //     function sendAjaxRequest() {
+    //         let csrfToken = window.csrfTokenValue
+    //
+    //         alert('Before AJAX');
+    //
+    //         $.ajax({
+    //             type: 'post',
+    //             url: '',
+    //             headers: {
+    //                 "X-CSRF-Token" : csrfToken,
+    //             },
+    //             data:
+    //                 {
+    //                     'action' : 'site-module/shipping/do-something',
+    //                     'splitOneMeals' : 'bblah',
+    //                     'splitTwoMeals' : 'blaeha2',
+    //                 },
+    //             dataType: 'json',
+    //             success: function(response) {
+    //                 alert(`Ajax SUCCESS: => ${JSON.stringify(response)}`)
+    //             },
+    //             error: function(error) {
+    //                 alert(`Ajax Error: => ${JSON.stringify(error)}`)
+    //             }
+    //         });
+    //     }
+    // })
 
     function gavinDoStuff() {
         alert("You clicked a butt-on!");
