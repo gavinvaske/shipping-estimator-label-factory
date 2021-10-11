@@ -48,7 +48,7 @@ class ShippingController extends Controller
 
         $upsResponse = $shippingService->makeUPSApiShippingRequest();
 
-        return $upsResponse;
+        return $this->asJson($upsResponse);
     }
 
     /**
