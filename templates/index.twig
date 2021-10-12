@@ -56,12 +56,39 @@
         <div class="main">
             <h1>Welcome Gavin Vaske</h1>
             <p>The man who moves mountains...starts by moving stones.</p>
-            <button id="gavin-btn">
-                Click Me!!
-            </button>
             <form method="post" class="add-to-cart-form">
                 {{ csrfInput() }}
                 <input type="hidden" name="action" value="site-module/shipping/do-something">
+
+                <div class="form-group">
+                    <label for="address">Street Address</label>
+                    <input type="text" name="address" placeholder="E.g. 32 Job Street" />
+                </div>
+
+                <div class="form-group">
+                    <label for="city">City</label>
+                    <input type="text" name="city" placeholder="orange Country" />
+                </div>
+
+                <div class="form-group">
+                    <label for="state">State</label>
+                    <input type="text" name="state" placeholder="CA" />
+                </div>
+
+                <div class="form-group">
+                    <label for="zipcode">Zipcode</label>
+                    <input type="text" name="zipcode" placeholder="92662"/>
+                </div>
+
+                <div class="form-group">
+                    <label for="package-weight">Package Weight</label>
+                    <input type="text" name="package-weight" placeholder="E.g. 5" />
+                </div>
+
+                <div class="form-group">
+                    <label for="package-height">Package Height</label>
+                    <input type="text" name="package-height" placeholder="E.g. 10" />
+                </div>
 
                 <button type="submit" class="primary-btn bg-orange border-orange">
                     Submit Form
@@ -79,11 +106,17 @@
         alert(log_message)
         // console.log(log_message);
         e.preventDefault();
-        var form_data = $(this).serializeArray();
+        let form_data = $('.add-to-cart-form').serializeArray();
+        alert(`BEFORE => ${JSON.stringify(form_data)}`);
         let csrfToken = window.csrfTokenValue
-        form_data['CRAFT_CSRF_TOKEN'] = csrfToken	// Setting CSRF token in duplicate places redundently
 
+        form_data['CRAFT_CSRF_TOKEN'] = csrfToken	// Setting CSRF token in duplicate places redundently
+        form_data['TESTICLES'] = 'it workssss!'
         form_data['action'] = 'site-module/shipping/do-something'
+
+
+        alert(`AFTER => ${JSON.stringify(form_data)}`);
+
         $.ajax({
             type: 'post',
             url: '',

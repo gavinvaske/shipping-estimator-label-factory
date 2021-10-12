@@ -4,6 +4,11 @@ namespace modules\sitemodule\controllers;
 
 use Craft;
 use craft\web\Controller;
+use modules\sitemodule\models\Address;
+use modules\sitemodule\models\Dimensions;
+use modules\sitemodule\models\PackageWeight;
+use modules\sitemodule\models\ShipTo;
+use modules\sitemodule\models\UnitOfMeasurement;
 use modules\sitemodule\services\ShippingService;
 
 /**
@@ -46,7 +51,29 @@ class ShippingController extends Controller
         $result = 'Welcome to the ShippingController actionDoSomething() method';
         $shippingService = new ShippingService();
 
-        $upsResponse = $shippingService->makeUPSApiShippingRequest();
+        $request = Craft::$app->getRequest();
+
+        $request = Craft::$app->getRequest();
+
+        $streetAddress = $request->getRequiredParam('address');
+        $city = $request->getRequiredParam('city');
+        $state = $request->getRequiredParam('state');
+        $zipcode = $request->getRequiredParam('zipcode');
+
+        $packageWeight = $request->getRequiredParam('package-weight');
+        $packageHeight = $request->getRequiredParam('package-height');
+
+        $AddressTo = new Address($streetAddress, $city, $state, $zipcode, "US");
+        //$AddressTo = new Address("355 West San Fernando Street", "San Jose", "CA", "95113", "US");
+        $shipToAddress = new ShipTo("Sarita Lynn", $AddressTo);
+
+        $unitOfMeasure = new UnitOfMeasurement("LBS", "");
+        $packageWeight = new PackageWeight($unitOfMeasure, $packageWeight);
+
+        $UnitOfMeasurement = new UnitOfMeasurement("IN", "");
+        $packageDimensions = new Dimensions($UnitOfMeasurement, "10", "7", $packageHeight);
+
+        $upsResponse = $shippingService->makeUPSApiShippingRequest($shipToAddress, $packageWeight, $packageDimensions);
 
         return $this->asJson($upsResponse);
     }

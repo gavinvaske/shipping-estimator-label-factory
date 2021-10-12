@@ -25,10 +25,11 @@ class ShippingService extends Component
 
     const UPS_RATE_URL = "https://onlinetools.ups.com/ship/v1/rating/Rate";
 
-    function makeUPSApiShippingRequest(){
+    function makeUPSApiShippingRequest($shipToAddress, $packageWeight, $packageDimensions){
         $apiService = new ApiService();
         $method = 'POST';
-        $data = $this->createUPSShippingRequestBody();
+
+        $data = $this->createUPSShippingRequestBody($shipToAddress, $packageWeight, $packageDimensions);
 
         $make_call = $apiService->callAPI($method, self::UPS_RATE_URL, json_encode($data));
 
@@ -37,37 +38,20 @@ class ShippingService extends Component
         return json_encode($raw_response);
     }
 
-    private function createUPSShippingRequestBody()
+    private function createUPSShippingRequestBody($shipToAddress, $packageWeight, $packageDimensions)
     {
         $requestBody = array();
+
         $Request = new Request("1703", new TransactionReference(" "));
-
         $ShipmentRatingOptions = new ShipmentRatingOptions("TRUE");
-
         $AddressFrom = new Address("366 Robin LN SE", "Marietta", "GA", "30067", "US");
         $Shipper = new Shipper("Billy Blanks", " ", $AddressFrom);
-
-        $AddressTo = new Address("355 West San Fernando Street", "San Jose", "CA", "95113", "US");
-        $ShipTo = new ShipTo("Sarita Lynn", $AddressTo);
-
         $ShipFrom = new ShipFrom("Billy Blanks", $AddressFrom);
-
         $Service = new Service("03", "Ground");
-
-        $UnitOfMeasurement = new UnitOfMeasurement("LBS", "Pounds");
-        $ShipmentTotalWeight = new ShipmentTotalWeight($UnitOfMeasurement, "10");
-
         $PackagingType = new PackagingType("02", "Package");
-
-        $UnitOfMeasurement = new UnitOfMeasurement("IN", "");
-        $Dimensions = new Dimensions($UnitOfMeasurement, "10", "7", "5");
-
-        $UnitOfMeasurement = new UnitOfMeasurement("LBS", "");
-        $PackageWeight = new PackageWeight($UnitOfMeasurement, "7");
-
-        $Package = new Package($PackagingType, $Dimensions, $PackageWeight);
+        $Package = new Package($PackagingType, $packageDimensions, $packageWeight);
         
-        $Shipment = new Shipment($ShipmentRatingOptions, $Shipper, $ShipTo, $ShipFrom, $Service, $ShipmentTotalWeight, $Package);
+        $Shipment = new Shipment($ShipmentRatingOptions, $Shipper, $shipToAddress, $ShipFrom, $Service, $packageWeight, $Package);
 
         $requestBody["RateRequest"] = new RateRequest($Request, $Shipment);
 
