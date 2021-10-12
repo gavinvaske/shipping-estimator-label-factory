@@ -33,7 +33,7 @@ class ShippingController extends Controller
      *         The actions must be in 'kebab-case'
      * @access protected
      */
-    protected $allowAnonymous = ['index', 'do-something'];
+    protected $allowAnonymous = true;
 
     /**
      * Handle a request going to our plugin's actionDoSomething URL,
@@ -46,7 +46,9 @@ class ShippingController extends Controller
         $result = 'Welcome to the ShippingController actionDoSomething() method';
         $shippingService = new ShippingService();
 
-        return $shippingService->makeUPSApiShippingRequest();
+        $upsResponse = $shippingService->makeUPSApiShippingRequest();
+
+        return $this->asJson($upsResponse);
     }
 
     /**
