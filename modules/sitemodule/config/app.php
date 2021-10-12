@@ -12,27 +12,11 @@
  * You can define custom modules and system components, and even override the
  * built-in system components.
  */
-
 return [
-    // All environments
-    '*'       => [
-        'modules'   => [
-            'site-module' => [
-                'class' => \modules\sitemodule\SiteModule::class,
-            ],
+    'modules' => [
+        'site-module' => [
+            'class' => \modules\sitemodule\SiteModule::class,
         ],
-        'bootstrap' => ['site-module'],
     ],
-
-    // Live (production) environment
-    'live'    => [
-    ],
-
-    // Staging (pre-production) environment
-    'staging' => [
-    ],
-
-    // Local (development) environment
-    'local'   => [
-    ],
+    'bootstrap' => ['site-module'],
 ];
