@@ -2,11 +2,14 @@
 <html lang="en-US">
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
+    <script src="https://js.stripe.com/v3/"></script>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta charset="utf-8" />
     <title>Welcome Gavin Vaske</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <meta name="referrer" content="origin-when-cross-origin" />
+    <title>Buy cool new product</title>
     <style>
         html,
         body {
@@ -22,7 +25,7 @@
             background-color: hsl(212, 60%, 97%);
             color: hsl(209, 18%, 30%);
             display: flex;
-            text-align: center; 
+            text-align: center;
         }
         #modal {
             display: flex;
@@ -42,7 +45,7 @@
             justify-content: center;
             align-items: center;
         }
-    
+
         h1 {
             margin-top: 0;
 
@@ -94,6 +97,25 @@
                     Submit Form
                 </button>
             </form>
+
+            <section>
+                <div class="product">
+                    <img
+                            src="https://i.imgur.com/EHyR2nP.png"
+                            alt="The cover of Stubborn Attachments"
+                    />
+                    <div class="description">
+                        <h3>Label Purchase</h3>
+                        <h5>$10.00</h5>
+                    </div>
+                </div>
+                <form method="post">
+                    {{ csrfInput() }}
+                    <input type="hidden" name="action" value="site-module/payment/create-checkout-session">
+                    <button type="submit" id="checkout-button">Checkout</button>
+                </form>
+            </section>
+
         </div>
     </div>
 </div>
@@ -102,20 +124,12 @@
 
 <script>
     $('form.add-to-cart-form').on('submit', function(e) {
-        let log_message = 'add to cart clicked'
-        alert(log_message)
-        // console.log(log_message);
         e.preventDefault();
         let form_data = $('.add-to-cart-form').serializeArray();
-        alert(`BEFORE => ${JSON.stringify(form_data)}`);
         let csrfToken = window.csrfTokenValue
 
         form_data['CRAFT_CSRF_TOKEN'] = csrfToken	// Setting CSRF token in duplicate places redundently
-        form_data['TESTICLES'] = 'it workssss!'
         form_data['action'] = 'site-module/shipping/do-something'
-
-
-        alert(`AFTER => ${JSON.stringify(form_data)}`);
 
         $.ajax({
             type: 'post',
@@ -135,40 +149,4 @@
             }
         });
     });
-    // $(document).ready(function () {
-    //     $("#gavin-btn").click(function() {
-    //         sendAjaxRequest();
-    //     })
-    //
-    //     function sendAjaxRequest() {
-    //         let csrfToken = window.csrfTokenValue
-    //
-    //         alert('Before AJAX');
-    //
-    //         $.ajax({
-    //             type: 'post',
-    //             url: '',
-    //             headers: {
-    //                 "X-CSRF-Token" : csrfToken,
-    //             },
-    //             data:
-    //                 {
-    //                     'action' : 'site-module/shipping/do-something',
-    //                     'splitOneMeals' : 'bblah',
-    //                     'splitTwoMeals' : 'blaeha2',
-    //                 },
-    //             dataType: 'json',
-    //             success: function(response) {
-    //                 alert(`Ajax SUCCESS: => ${JSON.stringify(response)}`)
-    //             },
-    //             error: function(error) {
-    //                 alert(`Ajax Error: => ${JSON.stringify(error)}`)
-    //             }
-    //         });
-    //     }
-    // })
-
-    function gavinDoStuff() {
-        alert("You clicked a butt-on!");
-    }
 </script>
